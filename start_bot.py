@@ -36,7 +36,7 @@ async def test(message:types.Message):
 async def not_found(message:types.Message):
     await message.reply("вас не понял, введите /help ")
 
-    executor.start_polling(dp)
+executor.start_polling(dp)
 
 
 
