@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from config import tOken
+from video.config import tOken
 from logging import basicConfig, INFO
 import sqlite3
 from datetime import datetime
@@ -72,12 +72,18 @@ async def start(message:types.Message):
         cursor.connection.commit()
 @dp.message_handler(text='Меню')
 async def manu(message:types.Message):
-    await message.answer("Шашлыки'🖇🙌🏻\nhttps://ocak.uds.app/c/goods?categoryId=498873", reply_markup=start_keyboard)
+    await message.answer("Шашлыки'🖇🙌🏻\nhttps://nambafood.kg/ojak-kebap", reply_markup=start_keyboard)
 
 
 @dp.message_handler(text='О нас')
 async def about(message:types.Message):
-    await message.answer('Кафе "Ожак Кебап" на протяжении 18 лет радует своих гостей с изысканными турецкими блюдами в особенности своим кебабом.Наше кафе отличается от многих кафе своими доступными ценами и быстрым сервисом.')
+    await message.answer('''Кафе "Ожак Кебап" на протяжении 18 лет радует своих гостей с изысканными турецкими блюдами в особенности своим кебабом.
+
+Наше кафе отличается от многих кафе своими доступными ценами и быстрым сервисом.
+
+В 2016 году по голосованию на сайте "Horeca" были удостоены "Лучшее кафе на каждый день" и мы стараемся оправдать доверие наших гостей.
+
+Мы не добавляем консерванты, усилители вкуса, красители, ароматизаторы, растительные и животные жиры, вредные добавки с маркировкой «Е». У нас строгий контроль качества: наши филиалы придерживаются норм Кырпотребнадзор и санэпидемстанции. Мы используем только сертифицированную мясную и рыбную продукцию от крупных поставщиков''')
 
 
 @dp.message_handler(text = 'Адрес')
@@ -134,7 +140,6 @@ async def process_food_title(message: types.Message, state: FSMContext):
     connect.commit()
 
     await message.answer("Ваш заказ принять.")
-    await state.finish()
 
 
-executor.start_polling(dp, skip_updates=True)
+executor.start_polling(dp)

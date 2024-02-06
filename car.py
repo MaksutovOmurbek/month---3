@@ -1,42 +1,383 @@
-TOKEN = '6910119090:AAFaYLIAS2IwxtdgBt-5S8-bD7OK6RsNMSU' 
-from car import TOKEN
+from video.config import TOKEN
 from aiogram import Bot, Dispatcher, types, executor
+
 
 bot = Bot(TOKEN) 
 dp = Dispatcher(bot)
 
+
+start_buttons = [
+    types.KeyboardButton('Mersedes-Benz'),
+    types.KeyboardButton('BMW'),
+    types.KeyboardButton('AUDI'),
+    types.KeyboardButton('HYUNDAI'),
+    types.KeyboardButton('TOYOTA'),
+    types.KeyboardButton('KIA'),
+    types.KeyboardButton('LEXUS'),
+    # types.KeyboardButton(''),
+    types.KeyboardButton('HONDA')
+]
+
+
+start_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*start_buttons)
+
 @dp.message_handler(commands='start')
 async def start(message:types.Message):
-    await message.answer("Какую машину найти")
+    await message.answer(f"Здраствуйте {message.from_user.full_name}",  reply_markup=start_keyboard)
 
+
+
+    
+mers_buttons = [
+    types.KeyboardButton('E212'),
+    types.KeyboardButton('W120'),
+    types.KeyboardButton('E210'),
+    types.KeyboardButton('GELIK'),
+    types.KeyboardButton('НАЗАД')
+]
+
+mers_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*mers_buttons)
 
 @dp.message_handler(text = 'Mersedes-Benz')
+async def texto(message:types.Message):
+    await message.answer('вот', reply_markup=mers_keyboard)
+
+
+@dp.message_handler(text = 'W120')
+async def textm(message:types.Message):
+    await message.answer_photo('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/1994_Mercedes-Benz_E_220_%28W124%29_sedan_%282012-06-24%29.jpg/1200px-1994_Mercedes-Benz_E_220_%28W124%29_sedan_%282012-06-24%29.jpg')
+
+
+@dp.message_handler(text = 'E210')
+async def textq(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-autoru-reviews/1337757/78mRmsvLlzGYgZZ0mEeFVo6sRPwFDJh9R/640x480')
+
+
+@dp.message_handler(text = 'E212')
+async def texts(message:types.Message):
+    await message.answer_photo('https://a.d-cd.net/42abdads-960.jpg')
+
+@dp.message_handler(text = 'GELIK')
+async def texta(message:types.Message):
+    await message.answer_photo('https://www.ixbt.com/img/n1/news/2023/5/1/2324245_large.png')
+
+
+
+bmw_buttons = [
+    types.KeyboardButton('E34'),
+    types.KeyboardButton('F90'),
+    types.KeyboardButton('X5'),
+    types.KeyboardButton('M5'),
+    types.KeyboardButton('M4'),
+    types.KeyboardButton('НАЗАД')
+]
+
+bmw_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*bmw_buttons)
+
+
+@dp.message_handler(text ='BMW')
 async def text(message:types.Message):
-    await message.answer_photo('https://sales.mercedes-autoforum.ru/images/content/merc_sedan_s_580_e.jpg')
+    await message.answer('вот', reply_markup=bmw_keyboard)
+
+@dp.message_handler(text='E34')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://www.classicandsportscar.com/sites/default/files/styles/article/public/2023-06/Classic%20%26%20Sports%20Car%20%E2%80%93%20Buyer%E2%80%99s%20guide%20BMW%20M5%20E34%20%E2%80%93%20LEAD.png?itok=ZcY5feBo')
+
+@dp.message_handler(text='F90')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.dzeninfra.ru/get-zen_doc/3523766/pub_63d5f1f9f86b2d2a16b3c17d_63d5f2b3db90d61608ac12d3/scale_1200')    
 
 
-@dp.message_handler(text = 'BMW')
-async def text(message:types.Message):
-    await message.answer_photo('https://avatars.mds.yandex.net/get-autoru-vos/11402504/f5a32ccf04abfbe5b4cd647b3700c285/456x342n')
+@dp.message_handler(text='X5')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://letiauto.lv/wp-content/uploads/2023/02/MSS01929.jpg')
 
 
-@dp.message_handler(text = 'Audi')
-async def text(message:types.Message):
-    await message.answer_photo('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScVv48lXIhNyb_6oElvT6kTa8ugCAo_V30bA&usqp=CAU')
+@dp.message_handler(text='M5')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://hips.hearstapps.com/hmg-prod/images/2024-bmw-m5-sedan-rendering-1676575610.jpg')
 
 
-@dp.message_handler(text = 'Hyundai')
-async def text(message:types.Message):
-    await message.answer_photo('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZ2kQiRSFZStt-qxHIdg914Sgfsa0nIbCO2Q&usqp=CAU')
+@dp.message_handler(text='M4')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://s.auto.drom.ru/i24249/c/photos/fullsize/bmw/m4/bmw_m4_973229.jpg')
 
 
-@dp.message_handler(text = 'Honda')
-async def text(message:types.Message):
-    await message.answer_photo('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/2018_Honda_Accord_12.17.17.jpg/1200px-2018_Honda_Accord_12.17.17.jpg')
 
 
-@dp.message_handler(text = 'Mclaren')
-async def text(message:types.Message):
-    await message.answer_photo('data:image/jpeg;base64,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')
+audi_buttons = [
+    types.KeyboardButton('A4'),
+    types.KeyboardButton('R8'),
+    types.KeyboardButton('G7'),
+    types.KeyboardButton('A1'),
+    types.KeyboardButton('G8'),
+    types.KeyboardButton('НАЗАД')
+]
+
+
+audi_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*audi_buttons)
+
+@dp.message_handler(text='AUDI')
+async def audit(message:types.Message):
+    await message.answer('вот',reply_markup=audi_keyboard)
+
+@dp.message_handler(text='A4')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://www.shutterstock.com/image-photo/whittleburynorthantsuk-aug-6th-2023-2018-600nw-2343504405.jpg')
+
+
+@dp.message_handler(text='R8')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://kolesa-uploads.ru/r/880x/40b1ac13-f5e7-4488-806e-ff8c56b6880e/a1914479-large.jpg')
+
+@dp.message_handler(text='G7')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1604130/2a0000017f6f0d9fc86002cd5db3ef657769/cattouchret')
+
+@dp.message_handler(text='G8')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://hips.hearstapps.com/hmg-prod/images/2024-audi-q8-exterior-static-103-64f0ba52d994a.jpg?crop=0.723xw:0.781xh;0.156xw,0.219xh&resize=768:*')
+
+@dp.message_handler(text='A1')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://images.drive.ru/i/0/5b28af75ec05c46c19000007.jpg')
+
+
+
+
+
+hun_buttons = [
+    types.KeyboardButton('SONATA'),
+    types.KeyboardButton('SOLARIS'),
+    types.KeyboardButton('SANTA FE'),
+    types.KeyboardButton('I30'),
+    types.KeyboardButton('AVANTE'),
+    types.KeyboardButton('НАЗАД')
+]
+
+
+hun_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*hun_buttons)
+
+@dp.message_handler(text='HYUNDAI')
+async def audit(message:types.Message):
+    await message.answer('вот',reply_markup=hun_keyboard)
+
+@dp.message_handler(text='SONATA')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://leasing.express/wp-content/uploads/2022/02/SonataYF.jpg')
+
+@dp.message_handler(text='AVANTE')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1540742/2a000001885342e4cf42c6e8133c9d8c7aa0/cattouchret')
+
+@dp.message_handler(text='SOLARIS')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1030388/2a0000017080b874c59ece700722941db579/cattouchret')
+
+
+@dp.message_handler(text='SANTA FE')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://www.hyundai-kemerovo.ru/upload/iblock/ca6/ca6929666d85c9662d2aabda64254c9c.jpg')
+
+@dp.message_handler(text='I30')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1604130/2a0000017ff613dbe2112f7badbaed8e8fa7/cattouch')
+
+
+toyo_buttons = [
+    types.KeyboardButton('CAMRY'),
+    types.KeyboardButton('RAV4'),
+    types.KeyboardButton('CARROLA'),
+    types.KeyboardButton('CROWN'),
+    types.KeyboardButton('LAND CRUISER'),
+    types.KeyboardButton('НАЗАД')
+]
+
+toyo_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*toyo_buttons)
+
+
+@dp.message_handler(text ='TOYOTA')
+async def toyota(message:types.Message):
+    await message.answer('вот', reply_markup=toyo_keyboard)
+
+
+@dp.message_handler(text='CARROLA')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://d8a6a33f-3369-444b-9b5f-793c13ff0708.selcdn.net/media/common/just_strip/tradeins.space/uploads/models_gallery_image/13778/450d7266a8acac506ddc97c36c79cedee2addd42.jpeg?v77')
+
+@dp.message_handler(text='CAMRY')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://scene7.toyota.eu/is/image/toyotaeurope/cam0001a_21-2:Medium-Landscape?ts=0&resMode=sharp2&op_usm=1.75,0.3,2,0')
+
+@dp.message_handler(text='CROWN')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://motor.ru/thumb/1500x0/filters:quality(75):no_upscale()/imgs/2023/11/02/12/6207392/1a6194de77a7cc2179239239f5eec4f71e202c9b.jpg')
+
+@dp.message_handler(text='RAV4')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://www.major-toyota.ru/assets/client/images/rav4_teaser_1.jpg')
+
+
+@dp.message_handler(text='LAND CRUISER')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://autorating.ru/upload/medialibrary/948/948a165ce83548d8c07c69a17557b1d6.jpg')
+
+
+
+lex_buttons = [
+    types.KeyboardButton('470'),
+    types.KeyboardButton('570'),
+    types.KeyboardButton('600'),
+    types.KeyboardButton('350'),
+    types.KeyboardButton('ES'),
+    types.KeyboardButton('НАЗАД')
+]
+
+lex_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*lex_buttons)
+
+
+@dp.message_handler(text ='LEXUS')
+async def toyota(message:types.Message):
+    await message.answer('вот', reply_markup=lex_keyboard)
+
+
+@dp.message_handler(text='470')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://autopark.kg/wp-content/uploads/2023/04/1-24-scaled-1.webp')
+@dp.message_handler(text='570')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://s.auto.drom.ru/i24248/r/photos/1398033/big_1521262.jpg')
+@dp.message_handler(text='600')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://s.auto.drom.ru/i24262/c/photos/fullsize/lexus/lx600/lexus_lx600_1034752.jpg')
+@dp.message_handler(text='350')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://s.auto.drom.ru/i24234/c/photos/fullsize/lexus/rx350/lexus_rx350_897844.jpg')
+
+
+@dp.message_handler(text='ES')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://scene7.toyota.eu/is/image/toyotaeurope/2022-lexus-es-bold-design-coupe-like-roofline-1920x1080-1?wid=1280&fit=fit,1&ts=1666339513566&resMode=sharp2&op_usm=1.75,0.3,2,0')
+
+
+
+honda_buttons = [
+    types.KeyboardButton('ACCORD'),
+    types.KeyboardButton('CR-V'),
+    types.KeyboardButton('CIVIC'),
+    types.KeyboardButton('ARIA'),
+    types.KeyboardButton('FIT'),
+    types.KeyboardButton('НАЗАД')
+]
+
+honda_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*honda_buttons)
+
+
+@dp.message_handler(text ='HONDA')
+async def honda(message:types.Message):
+    await message.answer('вот', reply_markup=honda_keyboard)
+
+
+@dp.message_handler(text='ACCORD')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://editorials.autotrader.ca/media/mvfb51px/2023-honda-accord-ex-03-jm.jpg?center=0.55296285774816079,0.49995024572193458&mode=crop&width=1920&height=1080&rnd=133282811715630000')
+@dp.message_handler(text='CR-V')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://photos.prnewswire.com/prnfull/20120831/LA66248')
+@dp.message_handler(text='CIVIC')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-autoru-reviews/1393169/t0SPNsIC1Oi2fE1QNBlLS4cioZHXO4rjA/1200x900')
+@dp.message_handler(text='ARIA')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://bluetooth-aux.com/upload/iblock/6bf/6bf9493cc0afd57ab55c01570ebec2b6.jpg')
+
+
+@dp.message_handler(text='FIT')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1030388/2a00000160957a71a054bea7dbe2a6389ed8/cattouchret')
+
+kia_buttons = [
+    types.KeyboardButton('SORENTO'),
+    types.KeyboardButton('CARNIVAL'),
+    types.KeyboardButton('K7'),
+    types.KeyboardButton('OPTIMA'),
+    types.KeyboardButton('SELTOS'),
+    types.KeyboardButton('НАЗАД')
+]
+
+kia_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*kia_buttons)
+
+
+@dp.message_handler(text ='KIA')
+async def kia(message:types.Message):
+    await message.answer('вот', reply_markup=kia_keyboard)
+
+
+@dp.message_handler(text='SELTOS')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://avatars.mds.yandex.net/get-vertis-journal/3934100/d069c7d0e15e455bbab4da24c76f55d4.jpg_1658410295225/orig')
+
+@dp.message_handler(text='SORENTO')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://images.prismic.io/carwow/815ca9aa-4b72-45e9-84df-25285116be1a_2023+Kia+Sorento+front+quarter+moving.jpg')
+
+@dp.message_handler(text='CARNIVAL')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://motor.ru/imgs/2021/07/12/13/4762933/e2b301d83f6ca1714858484c5211b8060ec74c67.jpg')
+
+@dp.message_handler(text='K7')
+async def toyota(message:types.Message):
+    await message.answer_photo('https://s.auto.drom.ru/i24274/c/photos/fullsize/kia/k7/kia_k7_1099487.jpg')
+
+@dp.message_handler(text='OPTIMA')
+async def bmw(message:types.Message):
+    await message.answer_photo('https://cdn.jdpower.com/ArticleImages/2019%20Kia%20Optima%2013750_635.jpg')
+
+
+# _buttons = [
+#     types.KeyboardButton('A4'),
+#     types.KeyboardButton('R8'),
+#     types.KeyboardButton('G7'),
+#     types.KeyboardButton('A1'),
+#     types.KeyboardButton('G8'),
+#     types.KeyboardButton('НАЗАД')
+# ]
+
+
+# _keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*_buttons)
+
+# @dp.message_handler(text='')
+# async def audit(message:types.Message):
+#     await message.answer('вот',reply_markup=_keyboard)
+
+# @dp.message_handler(text='A4')
+# async def bmw(message:types.Message):
+#     await message.answer_photo('https://www.shutterstock.com/image-photo/whittleburynorthantsuk-aug-6th-2023-2018-600nw-2343504405.jpg')
+
+
+# @dp.message_handler(text='R8')
+# async def bmw(message:types.Message):
+#     await message.answer_photo('https://kolesa-uploads.ru/r/880x/40b1ac13-f5e7-4488-806e-ff8c56b6880e/a1914479-large.jpg')
+
+# @dp.message_handler(text='G7')
+# async def bmw(message:types.Message):
+#     await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1604130/2a0000017f6f0d9fc86002cd5db3ef657769/cattouchret')
+
+# @dp.message_handler(text='G8')
+# async def bmw(message:types.Message):
+#     await message.answer_photo('https://hips.hearstapps.com/hmg-prod/images/2024-audi-q8-exterior-static-103-64f0ba52d994a.jpg?crop=0.723xw:0.781xh;0.156xw,0.219xh&resize=768:*')
+
+# @dp.message_handler(text='A1')
+# async def bmw(message:types.Message):
+#     await message.answer_photo('https://images.drive.ru/i/0/5b28af75ec05c46c19000007.jpg')
+
+
+@dp.message_handler(text='НАЗАД')
+async def rollback(message:types.Message):
+    await start(message)
+
+@dp.message_handler()
+async def not_found(message:types.Message):
+    await message.reply("вас не понял, введите /start")
 
 executor.start_polling(dp)
