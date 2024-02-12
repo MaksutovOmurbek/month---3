@@ -1,4 +1,4 @@
-from video.config import TOKEN
+from config import TOKEN
 from aiogram import Bot, Dispatcher, types, executor
 
 

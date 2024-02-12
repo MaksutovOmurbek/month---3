@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from video.config import tOken
+from config import tOken
 from logging import basicConfig, INFO
 import sqlite3
 from datetime import datetime
