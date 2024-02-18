@@ -222,16 +222,14 @@ async def process_recipient_balance(message: types.Message, state: FSMContext):
 
 def process_transfer(sender_id, recipient_balance_data, amount):
     conn = sqlite3.connect('bank_customs.db')
-    cursor = conn.cursor()
+    cursor = conn.cursor()     
+    conn.execute('BEGIN TRANSACTION')
 
-    try:
-        conn.execute('BEGIN TRANSACTION')
-
-        cursor.execute('SELECT balance FROM user_info WHERE user_id = ?',
+    cursor.execute('SELECT balance FROM user_info WHERE user_id = ?',
         (sender_id,))
-        sender_balance = cursor.fetchone()[0]
+    sender_balance = cursor.fetchone()[0]
 
-        if sender_balance >= amount:
+    if sender_balance >= amount:
             cursor.execute('UPDATE user_info SET balance = balance - ? WHERE user_id = ?', (amount, sender_id))
 
             cursor.execute('SELECT user_id FROM user_info WHERE user_id = ?', (recipient_balance_data,))
@@ -242,28 +240,14 @@ def process_transfer(sender_id, recipient_balance_data, amount):
 
                 
                 conn.execute('COMMIT')
-
-                return True
-            else:
-                return False  
-        else:
-            return False  
-
-    except Exception as e:
-        conn.execute('ROLLBACK')
-        print(f'Error: {e}')
-        return False
-
-    finally:
-        
-        conn.close()
+                conn.commit()
 
 @dp.message_handler()
-async def mistake(message: types.Message):
+async def a(message: types.Message):
     await message.answer("Я не понял ваш запрос, введите команду /start")
 
 
-executor.start_polling(dp, skip_updates=True)
+executor.start_polling(dp)
 
 
 
