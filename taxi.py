@@ -15,7 +15,7 @@ start_inline_buttons = [
 ]
 start_inline_keyboard = types.InlineKeyboardMarkup().add(*start_inline_buttons)
 
-dp.message_handler(commands='start')
+@dp.message_handler(commands='start')
 async def start(message: types.Message):
     await message.answer("Добро Пожаловать Yandex Taxi!!!", reply_markup=start_inline_keyboard)
 

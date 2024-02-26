@@ -334,44 +334,6 @@ async def bmw(message:types.Message):
     await message.answer_photo('https://cdn.jdpower.com/ArticleImages/2019%20Kia%20Optima%2013750_635.jpg')
 
 
-# _buttons = [
-#     types.KeyboardButton('A4'),
-#     types.KeyboardButton('R8'),
-#     types.KeyboardButton('G7'),
-#     types.KeyboardButton('A1'),
-#     types.KeyboardButton('G8'),
-#     types.KeyboardButton('НАЗАД')
-# ]
-
-
-# _keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*_buttons)
-
-# @dp.message_handler(text='')
-# async def audit(message:types.Message):
-#     await message.answer('вот',reply_markup=_keyboard)
-
-# @dp.message_handler(text='A4')
-# async def bmw(message:types.Message):
-#     await message.answer_photo('https://www.shutterstock.com/image-photo/whittleburynorthantsuk-aug-6th-2023-2018-600nw-2343504405.jpg')
-
-
-# @dp.message_handler(text='R8')
-# async def bmw(message:types.Message):
-#     await message.answer_photo('https://kolesa-uploads.ru/r/880x/40b1ac13-f5e7-4488-806e-ff8c56b6880e/a1914479-large.jpg')
-
-# @dp.message_handler(text='G7')
-# async def bmw(message:types.Message):
-#     await message.answer_photo('https://avatars.mds.yandex.net/get-verba/1604130/2a0000017f6f0d9fc86002cd5db3ef657769/cattouchret')
-
-# @dp.message_handler(text='G8')
-# async def bmw(message:types.Message):
-#     await message.answer_photo('https://hips.hearstapps.com/hmg-prod/images/2024-audi-q8-exterior-static-103-64f0ba52d994a.jpg?crop=0.723xw:0.781xh;0.156xw,0.219xh&resize=768:*')
-
-# @dp.message_handler(text='A1')
-# async def bmw(message:types.Message):
-#     await message.answer_photo('https://images.drive.ru/i/0/5b28af75ec05c46c19000007.jpg')
-
-
 @dp.message_handler(text='НАЗАД')
 async def rollback(message:types.Message):
     await start(message)

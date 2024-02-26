@@ -37,3 +37,4 @@ async def get_random_location(callback: types.CallbackQuery):
             break
 
 executor.start_polling(dp)
+
