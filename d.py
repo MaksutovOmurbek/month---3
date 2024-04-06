@@ -1,5 +1,4 @@
 TOKEN = '6664037537:AAGgdjdctiGM_ZqZ6IsT4_UGEPY_1m48Otg'
-from config import TOKEN
 import random
 from aiogram import Bot, Dispatcher, types, executor
 

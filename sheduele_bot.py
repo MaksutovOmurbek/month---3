@@ -1,6 +1,8 @@
 from aiogram import Bot, Dispatcher, types, executor
-from config import Token
 import logging, aioschedule, asyncio
+
+Token = '7106836516:AAHdrX2n783ZcMNhVRaKnEEkt0uYCIaVL64'
+
 
 # Инициализация бота и диспетчера
 bot = Bot(Token)

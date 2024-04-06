@@ -35,10 +35,10 @@ import schedule, time
 
 import schedule, time, requests
 
-def get_btc_price():
-    url = 'https://www.binance.com/api/v3/ticker/price?symbol=BTCUSDT'
+def get_dollar_price():
+    url = 'https://www.nbkr.kg/index1.jsp?item=1562&lang=RUS'
     response = requests.get(url=url).json()
-    bts_price = round(int(response['price']), 2)
+    bts_price = round(int(response['']), 2)
 
     print(f"Цена биткоина {time.ctime()} составляет {bts_price['price']}$")
 
@@ -50,10 +50,11 @@ def get_eth_price():
 
     print(f"Цена эфериума {time.ctime()} составляет {eth_price['price']}$")
 
-schedule.every(5).seconds.do(get_btc_price)
-schedule.every(5).seconds.do(get_eth_price)
+schedule.every(5).seconds.do(get_dollar_price)
+schedule.every(10).seconds.do(get_eth_price)
 
 
 
 while True:
     schedule.run_pending()
+    
