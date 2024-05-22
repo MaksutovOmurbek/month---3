@@ -1,34 +1,44 @@
-import requests
-from bs4 import BeautifulSoup
-from aiogram import Bot, Dispatcher, executor, types
-import time, logging
+from aiogram import Bot, Dispatcher, types, executor
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from logging import basicConfig, INFO
+import sqlite3
 from datetime import datetime
 
-Token= '7106836516:AAHdrX2n783ZcMNhVRaKnEEkt0uYCIaVL64'
+token = '7106836516:AAHdrX2n783ZcMNhVRaKnEEkt0uYCIaVL64'
 
-bot = Bot(Token)
-dp = Dispatcher(bot)
-logging.basicConfig(level=logging.INFO)
+
+bot = Bot(token)
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
+basicConfig(level=INFO)
+
+taxi = [
+    types.InlineKeyboardButton('Сайт', callback_data='https://taxi.yandex.ru/'),
+    types.InlineKeyboardButton('Заказать', callback_data='ybihss' )]
+
+taxi_l = types.InlineKeyboardMarkup().add(*taxi)
 
 @dp.message_handler(commands='start')
-async def start(message: types.Message):
-    await message.answer("Валюта")
-
-    url = 'https://www.nbkr.kg/index.jsp?lang=RUS'
-    response = requests.get(url)
-    soup  = BeautifulSoup(response.text, 'lxml')
-    time = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    usd_rate = soup.find_all('td', class_='exrate')
-    eur_rate = soup.find_all('td', class_='exrate')
-    rub_rate = soup.find_all('td', class_='exrate')
-    
+async def start(message:types.Message):
+    await message.answer('Здраствуйте', reply_markup=taxi_l)
 
 
-    for rub, usd, euro in zip(rub_rate, eur_rate, usd_rate ):
-        await message.answer(f" Валюта {time}:\nКурс USD: {usd[0]}\nКурс EUR: {euro[2]}\nКурс RUB: {rub[4]}\n")
-    
+# @dp.message_handler(text='Сайт')
+# async def start(message:types.Message):
+    # await message.reply('https://taxi.yandex.ru/')
 
 
 
 executor.start_polling(dp)
+
+
+
+
+
+
+
+
+ 
+

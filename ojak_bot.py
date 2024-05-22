@@ -1,17 +1,17 @@
-
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
-from config import tOken
 from logging import basicConfig, INFO
 import sqlite3
 from datetime import datetime
 
-bot = Bot(tOken)
+# Инициализация бота, хранилища состояний и диспетчера
+bot = Bot('7106836516:AAHdrX2n783ZcMNhVRaKnEEkt0uYCIaVL64')
 storage = MemoryStorage()
 dp = Dispatcher(bot, storage=storage)
 basicConfig(level=INFO)
+
 
 class OrderFoodState(StatesGroup):
     name = State()
@@ -19,6 +19,7 @@ class OrderFoodState(StatesGroup):
     phone_number = State()
     address = State()
 
+# Создание подключения к базе данных SQLite
 connect = sqlite3.connect('ojak_kebap.db')
 cursor = connect.cursor()
 cursor.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -28,8 +29,8 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
         last_name VARCHAR(100),
         date_joined DATETIME
 );''')
-
 connect.commit()
+
 cursor.execute(''' CREATE TABLE IF NOT EXISTS orders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name VARCHAR(100),
@@ -39,13 +40,7 @@ cursor.execute(''' CREATE TABLE IF NOT EXISTS orders (
 );''')
 connect.commit()
 
-class OrderFoodState(StatesGroup):
-    name = State()
-    title = State()
-    phone_number = State()
-    address = State()
-
-
+# Создание клавиатуры для начала работы с ботом
 start_buttons = [
     types.KeyboardButton('О нас'),
     types.KeyboardButton('Меню'),
@@ -54,29 +49,30 @@ start_buttons = [
 ]
 start_keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True).add(*start_buttons)
 
-
+# Обработчик команды /start
 @dp.message_handler(commands='start')
-async def start(message:types.Message):
-    cursor=connect.cursor()
+async def start(message: types.Message):
     cursor.execute(f"SELECT id FROM users WHERE id = {message.from_user.id};")
     res = cursor.fetchall()
     if not res:
         cursor.execute(f"""INSERT INTO users (id, username, first_name, last_name, date_joined) VALUES (
             {message.from_user.id},
+            '{message.from_user.username}',
             '{message.from_user.first_name}',
             '{message.from_user.last_name}',
-            '{message.from_user.username}',
             '{datetime.now()}'
 );""")
-        
         cursor.connection.commit()
+    await message.answer("Привет! Чтобы сделать заказ, нажмите 'Заказать еду' или воспользуйтесь другими доступными командами.", reply_markup=start_keyboard)
+
+# Обработчик команды "Меню"
 @dp.message_handler(text='Меню')
-async def manu(message:types.Message):
+async def menu(message: types.Message):
     await message.answer("Шашлыки'🖇🙌🏻\nhttps://nambafood.kg/ojak-kebap", reply_markup=start_keyboard)
 
-
+# Обработчик команды "О нас"
 @dp.message_handler(text='О нас')
-async def about(message:types.Message):
+async def about(message: types.Message):
     await message.answer('''Кафе "Ожак Кебап" на протяжении 18 лет радует своих гостей с изысканными турецкими блюдами в особенности своим кебабом.
 
 Наше кафе отличается от многих кафе своими доступными ценами и быстрым сервисом.
@@ -85,61 +81,55 @@ async def about(message:types.Message):
 
 Мы не добавляем консерванты, усилители вкуса, красители, ароматизаторы, растительные и животные жиры, вредные добавки с маркировкой «Е». У нас строгий контроль качества: наши филиалы придерживаются норм Кырпотребнадзор и санэпидемстанции. Мы используем только сертифицированную мясную и рыбную продукцию от крупных поставщиков''')
 
-
-@dp.message_handler(text = 'Адрес')
+# Обработчик команды "Адрес"
+@dp.message_handler(text='Адрес')
 async def address(message: types.Message):
     await message.answer("📌 Адрес:  234، 246 Курманжан-Датка ул., Ош")
-   
 
-
+# Обработчик команды "Заказать еду"
 @dp.message_handler(text='Заказать еду')
-async def about(message:types.Message):
+async def order_food(message: types.Message):
     await message.answer('Введите ваше имя: ')
     await OrderFoodState.name.set()
 
-
+# Обработчик ввода имени
 @dp.message_handler(state=OrderFoodState.name)
-async def process_food_title(message: types.Message, state: FSMContext):
+async def process_food_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['name'] = message.text
     await message.answer("Что хотите заказать?")
-    await OrderFoodState.next()
-
+    await OrderFoodState.title.set()
+    
 
 @dp.message_handler(state=OrderFoodState.title)
-async def process_food_title(message: types.Message, state: FSMContext):
+async def process_food_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['title'] = message.text
-    await message.answer("Введите свой номер телефона: ")
-    await OrderFoodState.next()
-
+    await message.answer("Ваш номер:")
+    await OrderFoodState.phone_number.set()
 
 @dp.message_handler(state=OrderFoodState.phone_number)
-async def process_food_title(message: types.Message, state: FSMContext):
+async def process_food_name(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['phone_number'] = message.text
-    await message.answer("Введите свой адрес:")
-    await OrderFoodState.next()
-
+    await message.answer("ваш адрес")
+    await OrderFoodState.address.set()
 
 @dp.message_handler(state=OrderFoodState.address)
-async def process_food_title(message: types.Message, state: FSMContext):
+async def experience(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['address'] = message.text
 
-    async with state.proxy() as data:
-        name = data['name']
-        title = data['title']
-        phone_number = data['phone_number']
-        address = data['address']
-
-    cursor.execute('''
-        INSERT INTO orders (name, title, phone_number, address )
-        VALUES (?, ?, ?, ?)
-    ''', (name, title, phone_number, address))
+    cursor.execute("""
+INSERT OR REPLACE INTO orders ( id, name, title,  address, phone_number)
+VALUES (?, ?, ?, ?)""", (message.from_user.id, data['name'], data['title'], data['address'], data['phone_number']))
     connect.commit()
 
-    await message.answer("Ваш заказ принять.")
+    await state.finish()
+    await message.answer("Мы сохранили ваши данные")
 
 
-executor.start_polling(dp)
+
+
+executor.start_polling(dp, skip_updates=True)
+

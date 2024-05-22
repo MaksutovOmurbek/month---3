@@ -1,48 +1,79 @@
-TOKEN = '6664037537:AAGgdjdctiGM_ZqZ6IsT4_UGEPY_1m48Otg'
-import random
 from aiogram import Bot, Dispatcher, types, executor
+from aiogram.dispatcher.filters.state import State, StatesGroup
+from aiogram.dispatcher.storage import FSMContext
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
+import logging, time, sqlite3
 
-bot = Bot(TOKEN) 
+bot = Bot(token='7106836516:AAHdrX2n783ZcMNhVRaKnEEkt0uYCIaVL64')
+memory = MemoryStorage()
 dp = Dispatcher(bot)
+logging.basicConfig(level=logging.INFO)
 
-number = random.randint(1, 3)
+connection = sqlite3.connect('register.db')
+cursor = connection.cursor()
+
+cursor.execute("""CREATE TABLE IF NOT EXISTS users(
+    id INTEGER PRIMARY KEY,
+    username VARCHAR(255),
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    created VARCHAR(255)
+);
+""")
+cursor.execute("""CREATE TABLE IF NOT EXISTS register(
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    created VARCHAR(100)
+);
+""")
+
+start_inline_buttons = [
+    types.InlineKeyboardButton('Стажировка', callback_data='register_callback'),
+    types.InlineKeyboardButton('Наш сайт', url='https://geeks.kg/'),
+    types.InlineKeyboardButton('Наш инстаграм', url='https://instagram.com/geeks_osh/'),
+]
+start_keyboard = types.InlineKeyboardMarkup().add(*start_inline_buttons)
+
+class Register(StatesGroup):
+    first_name = State()
+    last_name = State()
 
 @dp.message_handler(commands='start')
 async def start(message:types.Message):
-    await message.answer("Я загадал число от 1 до 3 угадай")
+    cursor.execute(f"SELECT id FROM users WHERE id = {message.from_user.id};")
+    result = cursor.fetchall()
+    print(result)
+    if result == []:
+        cursor.execute("INSERT INTO users VALUES (?, ?, ?, ?, ?);",
+                    (message.from_user.id, message.from_user.username,
+                        message.from_user.first_name, message.from_user.last_name,
+                        time.ctime() ))
+        cursor.connection.commit()
+    await message.answer(f"{message.from_user.full_name} привет", reply_markup=start_keyboard)
 
-@dp.message_handler(text = ['1'])
-async def start(message:types.Message):
-  if number == 1:
-     await message.reply("Правильно вы отгадали")
-     await message.answer_photo('https://media.makeameme.org/created/you-win-nothing-b744e1771f.jpg')
+@dp.callback_query_handler(lambda call: call.data == "register_callback")
+async def register_callback(callback:types.CallbackQuery):
+    await callback.answer("Чтобы пройти регистрацию напишите своё имя.")
+    await Register.first_name.set()
 
-  elif number != 1:
-    await message.reply("Неправильно вы отгадали")
-    await message.answer_photo('https://media.makeameme.org/created/sorry-you-lose.jpg')
+@dp.message_handler(state=Register.first_name)
+async def process_firstname(message: types.Message, state: FSMContext):
+    firstname = message.text
+    await state.update_data(firstname=firstname)
+    await message.answer("И еще напишите свою фамилию.")
+    await Register.last_name.set()
 
-@dp.message_handler(text = ['2'])
-async def start(message:types.Message):
-  if number == 2:
-     await message.reply("Правильно вы отгадали")
-     await message.answer_photo('https://media.makeameme.org/created/you-win-nothing-b744e1771f.jpg')
+@dp.message_handler(state=Register.last_name)
+async def process_lastname(message: types.Message, state: FSMContext):
+    lastname = message.text
+    async with state.proxy() as data:
+        firstname = data['firstname']
+    cursor.execute("INSERT INTO register VALUES (?, ?, ?);",
+                    (firstname, lastname, time.ctime()))
+    cursor.connection.commit()
+    await message.answer("Ваше имя и фамилия успешно сохранены.")
+    await state.finish()
 
-  elif number != 2:
-    await message.reply("Неправильно вы отгадали")
-    await message.answer_photo('https://media.makeameme.org/created/sorry-you-lose.jpg')
-
-
-@dp.message_handler(text = ['3'])
-async def start(message:types.Message):
-  if number == 3:
-     await message.reply("Правильно вы отгадали")
-     await message.answer_photo('https://media.makeameme.org/created/you-win-nothing-b744e1771f.jpg')
-
-  elif number != 3:
-    await message.reply("Неправильно вы отгадали")
-    await message.answer_photo('https://media.makeameme.org/created/sorry-you-lose.jpg')
-
-
-executor.start_polling(dp)
+executor.start_polling(dp, skip_updates=True) 
 
 
